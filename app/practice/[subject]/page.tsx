@@ -74,8 +74,8 @@ export default function SubjectPracticePage() {
     return (
         <main className="flex flex-col min-h-screen bg-slate-50">
             <Header />
-            <div className="flex-1 pt-6 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full">
-                <div className="mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+            <div className="flex-1 pt-3 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full">
+                <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                     <Button
                         variant="ghost"
                         onClick={() => router.push('/practice')}

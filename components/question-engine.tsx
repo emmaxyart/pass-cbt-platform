@@ -1,25 +1,53 @@
-'use client'
-
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Question } from '@/types'
-import { CheckCircle2, XCircle, ArrowRight, ArrowLeft, RotateCcw, Award } from 'lucide-react'
+import { CheckCircle2, XCircle, ArrowRight, ArrowLeft, RotateCcw, Award, Timer as TimerIcon, AlertCircle } from 'lucide-react'
 
 interface QuestionEngineProps {
     questions: Question[]
     subject: string
     onComplete?: (score: number) => void
+    timeLimit?: number // in minutes
 }
 
-export function QuestionEngine({ questions, subject, onComplete }: QuestionEngineProps) {
+export function QuestionEngine({ questions, subject, onComplete, timeLimit = 20 }: QuestionEngineProps) {
     const [currentIndex, setCurrentIndex] = useState(0)
     const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: string }>({})
     const [isFinished, setIsFinished] = useState(false)
     const [score, setScore] = useState(0)
+    const [timeLeft, setTimeLeft] = useState(timeLimit * 60)
+    const timerRef = useRef<NodeJS.Timeout | null>(null)
 
     const currentQuestion = questions[currentIndex]
+
+    // Timer logic
+    useEffect(() => {
+        if (!isFinished && timeLeft > 0) {
+            timerRef.current = setInterval(() => {
+                setTimeLeft((prev) => prev - 1)
+            }, 1000)
+        } else if (timeLeft === 0 && !isFinished) {
+            handleAutoFinish()
+        }
+
+        return () => {
+            if (timerRef.current) clearInterval(timerRef.current)
+        }
+    }, [timeLeft, isFinished])
+
+    const handleAutoFinish = () => {
+        calculateScore()
+        setIsFinished(true)
+    }
+
+    const formatTime = (seconds: number) => {
+        const h = Math.floor(seconds / 3600)
+        const m = Math.floor((seconds % 3600) / 60)
+        const s = seconds % 60
+        return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`
+    }
 
     const handleSelect = (option: string) => {
         if (isFinished) return
@@ -57,6 +85,7 @@ export function QuestionEngine({ questions, subject, onComplete }: QuestionEngin
         setSelectedAnswers({})
         setIsFinished(false)
         setScore(0)
+        setTimeLeft(timeLimit * 60)
     }
 
     if (isFinished) {
@@ -95,18 +124,27 @@ export function QuestionEngine({ questions, subject, onComplete }: QuestionEngin
 
     return (
         <div className="max-w-3xl mx-auto">
-            {/* Progress Bar */}
-            <div className="mb-8">
-                <div className="flex justify-between items-end mb-2">
-                    <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">Question {currentIndex + 1} of {questions.length}</span>
-                    <span className="text-primary font-bold">{Math.round(((currentIndex + 1) / questions.length) * 100)}%</span>
+            {/* Header with Progress and Timer */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                {/* Progress Bar */}
+                <div className="flex-1">
+                    <div className="flex justify-between items-end mb-2">
+                        <span className="text-xs font-bold text-slate-400 uppercase tracking-widest leading-none">Question {currentIndex + 1} of {questions.length}</span>
+                        <span className="text-primary font-bold leading-none">{Math.round(((currentIndex + 1) / questions.length) * 100)}%</span>
+                    </div>
+                    <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                        <motion.div
+                            className="h-full bg-primary"
+                            initial={{ width: 0 }}
+                            animate={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}
+                        />
+                    </div>
                 </div>
-                <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-                    <motion.div
-                        className="h-full bg-primary"
-                        initial={{ width: 0 }}
-                        animate={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}
-                    />
+
+                {/* Timer */}
+                <div className={`flex items-center gap-2 px-4 py-2 rounded-2xl border-2 transition-colors ${timeLeft < 60 ? 'bg-red-50 border-red-200 text-red-600 animate-pulse' : 'bg-white border-slate-100 text-slate-600'}`}>
+                    <TimerIcon className="w-5 h-5" />
+                    <span className="font-mono text-xl font-bold">{formatTime(timeLeft)}</span>
                 </div>
             </div>
 
@@ -155,19 +193,27 @@ export function QuestionEngine({ questions, subject, onComplete }: QuestionEngin
             </AnimatePresence>
 
             {/* Navigation Buttons */}
-            <div className="flex justify-between mt-8">
+            <div className="flex flex-col sm:flex-row justify-between mt-8 gap-4">
                 <Button
                     variant="ghost"
                     onClick={handlePrev}
                     disabled={currentIndex === 0}
-                    className="gap-2 text-slate-600"
+                    className="gap-2 text-slate-600 order-2 sm:order-1"
                 >
                     <ArrowLeft className="w-4 h-4" /> Previous
                 </Button>
+
+                {timeLeft < 60 && (
+                    <div className="flex items-center gap-2 text-red-500 font-bold text-sm order-1 sm:order-2 justify-center sm:justify-start">
+                        <AlertCircle className="w-4 h-4" />
+                        Last minute! Finish quickly.
+                    </div>
+                )}
+
                 <Button
                     onClick={handleNext}
                     disabled={!selectedAnswers[currentIndex]}
-                    className="gap-2 px-8 py-6 rounded-2xl text-lg shadow-lg hover:shadow-xl transition-all"
+                    className="gap-2 px-8 py-6 rounded-2xl text-lg shadow-lg hover:shadow-xl transition-all order-1 sm:order-3"
                 >
                     {currentIndex === questions.length - 1 ? 'Finish Practice' : 'Next Question'}
                     <ArrowRight className="w-4 h-4" />

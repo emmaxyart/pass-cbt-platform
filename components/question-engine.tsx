@@ -194,6 +194,14 @@ export function QuestionEngine({ questions, subject, onComplete, timeLimit = 3 }
 
             {/* Navigation Buttons */}
             <div className="flex flex-col sm:flex-row justify-between mt-8 gap-4">
+                {/* Warning message always above buttons on mobile */}
+                {timeLeft < 60 && (
+                    <div className="flex items-center gap-2 text-red-500 font-bold text-sm justify-center sm:justify-start sm:absolute sm:left-1/2 sm:-translate-x-1/2 sm:mt-4">
+                        <AlertCircle className="w-4 h-4" />
+                        Last minute! Finish quickly.
+                    </div>
+                )}
+
                 <Button
                     variant="ghost"
                     onClick={handlePrev}
@@ -202,13 +210,6 @@ export function QuestionEngine({ questions, subject, onComplete, timeLimit = 3 }
                 >
                     <ArrowLeft className="w-4 h-4" /> Previous
                 </Button>
-
-                {timeLeft < 60 && (
-                    <div className="flex items-center gap-2 text-red-500 font-bold text-sm order-1 sm:order-2 justify-center sm:justify-start">
-                        <AlertCircle className="w-4 h-4" />
-                        Last minute! Finish quickly.
-                    </div>
-                )}
 
                 <Button
                     onClick={handleNext}

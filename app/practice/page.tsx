@@ -57,11 +57,11 @@ export default function PracticePage() {
     return (
         <main className="flex flex-col min-h-screen bg-slate-50">
             <Header />
-            <div className="flex-1 py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+            <div className="flex-1 pt-6 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
                 {/* Header Section */}
-                <div className="text-center mb-12">
-                    <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Choose a Subject</h1>
-                    <p className="text-slate-600 max-w-2xl mx-auto">
+                <div className="text-left md:text-center mb-10 md:mb-16">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 mb-4 tracking-tight">Choose a Subject</h1>
+                    <p className="text-slate-600 text-base sm:text-lg max-w-2xl md:mx-auto leading-relaxed">
                         Select a subject to start practicing past JAMB questions. Free accounts have access to English and Mathematics.
                     </p>
                 </div>

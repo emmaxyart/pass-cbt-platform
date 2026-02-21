@@ -74,18 +74,18 @@ export default function SubjectPracticePage() {
     return (
         <main className="flex flex-col min-h-screen bg-slate-50">
             <Header />
-            <div className="flex-1 py-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full">
-                <div className="mb-8 flex items-center justify-between">
+            <div className="flex-1 pt-6 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full">
+                <div className="mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                     <Button
                         variant="ghost"
                         onClick={() => router.push('/practice')}
-                        className="gap-2"
+                        className="gap-2 -ml-2 text-slate-600 hover:text-primary transition-colors order-1"
                     >
                         <ArrowLeft className="w-4 h-4" /> Back to Subjects
                     </Button>
-                    <div className="text-right">
-                        <h1 className="text-2xl font-bold text-slate-900 capitalize">{subjectName} Practice</h1>
-                        <p className="text-sm text-slate-500">JAMB Past Questions</p>
+                    <div className="text-left sm:text-right w-full sm:w-auto order-2">
+                        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 capitalize leading-tight mb-1">{subjectName} Practice</h1>
+                        <p className="text-sm text-slate-500 font-medium">JAMB Past Questions • {subjectQuestions.length} Questions</p>
                     </div>
                 </div>
 

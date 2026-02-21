@@ -12,7 +12,7 @@ interface QuestionEngineProps {
     timeLimit?: number // in minutes
 }
 
-export function QuestionEngine({ questions, subject, onComplete, timeLimit = 20 }: QuestionEngineProps) {
+export function QuestionEngine({ questions, subject, onComplete, timeLimit = 3 }: QuestionEngineProps) {
     const [currentIndex, setCurrentIndex] = useState(0)
     const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: string }>({})
     const [isFinished, setIsFinished] = useState(false)

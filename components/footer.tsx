@@ -31,11 +31,11 @@ export function Footer() {
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
       viewport={{ once: true }}
-      className="w-full bg-foreground text-background py-12 md:py-16"
+      className="w-full bg-foreground text-background py-6 md:py-8"
     >
       <div className="px-4 sm:px-6 lg:px-8">
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-8"
+          className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-5"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -77,21 +77,6 @@ export function Footer() {
                   About Us
                 </Link>
               </li>
-              <li>
-                <Link href="#" className="text-sm opacity-80 hover:opacity-100 transition">
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="text-sm opacity-80 hover:opacity-100 transition">
-                  Careers
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="text-sm opacity-80 hover:opacity-100 transition">
-                  Press
-                </Link>
-              </li>
             </ul>
           </motion.div>
 
@@ -115,9 +100,6 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm opacity-80 hover:opacity-100 transition">
-                  Status
-                </Link>
               </li>
             </ul>
           </motion.div>
@@ -136,22 +118,12 @@ export function Footer() {
                   Terms of Service
                 </Link>
               </li>
-              <li>
-                <Link href="#" className="text-sm opacity-80 hover:opacity-100 transition">
-                  Cookie Policy
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="text-sm opacity-80 hover:opacity-100 transition">
-                  Compliance
-                </Link>
-              </li>
             </ul>
           </motion.div>
         </motion.div>
 
         {/* Divider */}
-        <div className="border-t border-background/20 mb-8" />
+        <div className="border-t border-background/20 mb-5" />
 
         {/* Bottom Section */}
         <motion.div

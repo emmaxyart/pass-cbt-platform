@@ -11,6 +11,7 @@ import { BookOpen, Lock, CheckCircle, ArrowRight } from 'lucide-react'
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
 import { LoadingSpinner } from '@/components/loading-spinner'
+import { ExamYearModal } from '@/components/exam-year-modal'
 
 const subjects = [
     { name: 'English', icon: '📝', color: 'bg-blue-100 text-blue-600', isPremium: false },
@@ -26,6 +27,7 @@ const subjects = [
 export default function PracticePage() {
     const [isPremium, setIsPremium] = React.useState(false)
     const [isLoading, setIsLoading] = React.useState(true)
+    const [selectedSubject, setSelectedSubject] = React.useState<typeof subjects[number] | null>(null)
 
     React.useEffect(() => {
         const supabase = createClient()
@@ -45,6 +47,14 @@ export default function PracticePage() {
         }
         checkPremium()
     }, [])
+
+    const handleSubjectClick = (subject: typeof subjects[number]) => {
+        // Premium users get the year selection modal for ALL subjects
+        if (isPremium) {
+            setSelectedSubject(subject)
+        }
+        // Non-premium users clicking free subjects navigate directly (handled by Link below)
+    }
 
     if (isLoading) {
         return (
@@ -101,6 +111,13 @@ export default function PracticePage() {
                                                     <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
                                                 </Button>
                                             </Link>
+                                        ) : isPremium ? (
+                                            <Button
+                                                className="w-full bg-primary hover:bg-primary/90"
+                                                onClick={() => handleSubjectClick(subject)}
+                                            >
+                                                Select Year
+                                            </Button>
                                         ) : (
                                             <Link href={`/practice/${subject.name.toLowerCase()}`}>
                                                 <Button className="w-full bg-primary hover:bg-primary/90">
@@ -115,6 +132,18 @@ export default function PracticePage() {
                     })}
                 </div>
             </div>
+
+            {/* Exam Year Selection Modal — Premium users only */}
+            {selectedSubject && (
+                <ExamYearModal
+                    open={!!selectedSubject}
+                    onOpenChange={(open) => {
+                        if (!open) setSelectedSubject(null)
+                    }}
+                    subject={selectedSubject}
+                />
+            )}
+
             <Footer />
         </main>
     )

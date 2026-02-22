@@ -1,13 +1,13 @@
 'use client'
 
 import React from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { QuestionEngine } from '@/components/question-engine'
 import { mockQuestions } from '@/lib/data/questions'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, CalendarDays } from 'lucide-react'
 import { createClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
 import { LoadingSpinner } from '@/components/loading-spinner'
@@ -15,13 +15,17 @@ import { LoadingSpinner } from '@/components/loading-spinner'
 export default function SubjectPracticePage() {
     const params = useParams()
     const router = useRouter()
+    const searchParams = useSearchParams()
     const subjectName = params.subject as string
+    const selectedYear = searchParams.get('year')
     const [isAuthorized, setIsAuthorized] = React.useState<boolean | null>(null)
 
-    // Filter questions for this subject
-    const subjectQuestions = mockQuestions.filter(
-        q => q.subject.toLowerCase() === subjectName.toLowerCase()
-    )
+    // Filter questions for this subject, and optionally by year
+    const subjectQuestions = mockQuestions.filter(q => {
+        const matchesSubject = q.subject.toLowerCase() === subjectName.toLowerCase()
+        const matchesYear = selectedYear ? q.year === parseInt(selectedYear) : true
+        return matchesSubject && matchesYear
+    })
 
     React.useEffect(() => {
         const supabase = createClient()
@@ -84,8 +88,20 @@ export default function SubjectPracticePage() {
                         <ArrowLeft className="w-4 h-4" /> Back to Subjects
                     </Button>
                     <div className="text-left sm:text-right w-full sm:w-auto order-2">
-                        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 capitalize leading-tight mb-1">{subjectName} Practice</h1>
-                        <p className="text-sm text-slate-500 font-medium">JAMB Past Questions • {subjectQuestions.length} Questions</p>
+                        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 capitalize leading-tight mb-1">
+                            {subjectName} Practice
+                        </h1>
+                        <div className="flex items-center gap-2 sm:justify-end">
+                            {selectedYear && (
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-semibold">
+                                    <CalendarDays className="w-3 h-3" />
+                                    {selectedYear}
+                                </span>
+                            )}
+                            <p className="text-sm text-slate-500 font-medium">
+                                JAMB Past Questions • {subjectQuestions.length} Questions
+                            </p>
+                        </div>
                     </div>
                 </div>
 
@@ -143,8 +159,18 @@ export default function SubjectPracticePage() {
                     <div className="text-center py-20 bg-white rounded-3xl shadow-xl relative overflow-hidden group">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-slate-100/50 rounded-bl-[100px] border-l border-b border-slate-200/50 group-hover:scale-110 transition-transform duration-500" />
                         <div className="relative z-10">
-                            <h2 className="text-xl font-bold text-slate-900 mb-2">No questions found</h2>
-                            <p className="text-slate-600 mb-6">We are currently adding more questions for this subject.</p>
+                            <h2 className="text-xl font-bold text-slate-900 mb-2">
+                                {selectedYear
+                                    ? `No questions found for ${selectedYear}`
+                                    : 'No questions found'
+                                }
+                            </h2>
+                            <p className="text-slate-600 mb-6">
+                                {selectedYear
+                                    ? `We don't have ${subjectName} questions for ${selectedYear} yet. Try another year.`
+                                    : 'We are currently adding more questions for this subject.'
+                                }
+                            </p>
                             <Button onClick={() => router.push('/practice')}>Try another subject</Button>
                         </div>
                     </div>
@@ -154,3 +180,4 @@ export default function SubjectPracticePage() {
         </main>
     )
 }
+

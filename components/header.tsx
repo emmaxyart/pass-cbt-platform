@@ -34,6 +34,7 @@ export function Header() {
     { href: '/practice', label: 'Practice' },
     { href: '/dashboard', label: 'Dashboard' },
     { href: '/profile', label: 'Profile' },
+    { href: '/syllabus', label: 'Syllabus' },
     { href: '/about', label: 'About Us' },
   ]
 

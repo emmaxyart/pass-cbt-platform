@@ -51,7 +51,8 @@ export async function updateSession(request: NextRequest) {
         !request.nextUrl.pathname.startsWith('/syllabus') &&
         !request.nextUrl.pathname.startsWith('/about') &&
         request.nextUrl.pathname !== '/sitemap.xml' &&
-        request.nextUrl.pathname !== '/robots.txt'
+        request.nextUrl.pathname !== '/robots.txt' &&
+        !request.nextUrl.pathname.startsWith('/api/paystack/verify')
     ) {
         // no user, potentially respond by redirecting the user to the login page
         const url = request.nextUrl.clone()

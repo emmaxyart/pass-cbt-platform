@@ -1,9 +1,7 @@
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
   },
   images: {
     unoptimized: true,
@@ -20,14 +18,17 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'encrypted-tbn0.gstatic.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'questions.aloc.com.ng',
+      },
     ],
   },
-  // This helps when Next.js gets confused about the project root
   experimental: {
     serverActions: {
       bodySizeLimit: '2mb',
     },
   },
-}
+};
 
-export default nextConfig
+export default nextConfig;

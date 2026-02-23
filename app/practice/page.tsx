@@ -12,22 +12,32 @@ import { createClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
 import { LoadingSpinner } from '@/components/loading-spinner'
 import { ExamYearModal } from '@/components/exam-year-modal'
+import { UpgradeModal } from '@/components/upgrade-modal'
 
 const subjects = [
-    { name: 'English', icon: '📝', color: 'bg-blue-100 text-blue-600', isPremium: false },
-    { name: 'Mathematics', icon: '🔢', color: 'bg-green-100 text-green-600', isPremium: false },
-    { name: 'Physics', icon: '⚛️', color: 'bg-purple-100 text-purple-600', isPremium: true },
-    { name: 'Chemistry', icon: '🧪', color: 'bg-orange-100 text-orange-600', isPremium: true },
-    { name: 'Biology', icon: '🧬', color: 'bg-red-100 text-red-600', isPremium: true },
-    { name: 'Economics', icon: '📊', color: 'bg-indigo-100 text-indigo-600', isPremium: true },
-    { name: 'Government', icon: '🏛️', color: 'bg-yellow-100 text-yellow-600', isPremium: true },
-    { name: 'CRK', icon: '📖', color: 'bg-pink-100 text-pink-600', isPremium: true },
+    { name: 'English', icon: '📝', color: 'bg-blue-100 text-blue-600', isPremium: false, totalQuestions: 1842 },
+    { name: 'Mathematics', icon: '🔢', color: 'bg-green-100 text-green-600', isPremium: false, totalQuestions: 1219 },
+    { name: 'Physics', icon: '⚛️', color: 'bg-indigo-100 text-indigo-600', isPremium: true, totalQuestions: 599 },
+    { name: 'Chemistry', icon: '🧪', color: 'bg-orange-100 text-orange-600', isPremium: true, totalQuestions: 304 },
+    { name: 'Biology', icon: '🧬', color: 'bg-emerald-100 text-emerald-600', isPremium: true, totalQuestions: 384 },
+    { name: 'Economics', icon: '📊', color: 'bg-cyan-100 text-cyan-600', isPremium: true, totalQuestions: 657 },
+    { name: 'Government', icon: '🏛️', color: 'bg-yellow-100 text-yellow-600', isPremium: true, totalQuestions: 1493 },
+    { name: 'Literature', icon: '📚', color: 'bg-pink-100 text-pink-600', isPremium: true, totalQuestions: 0 },
+    { name: 'Commerce', icon: '💼', color: 'bg-amber-100 text-amber-600', isPremium: true, totalQuestions: 887 },
+    { name: 'Accounting', icon: '📒', color: 'bg-rose-100 text-rose-600', isPremium: true, totalQuestions: 0 },
+    { name: 'Geography', icon: '🌍', color: 'bg-teal-100 text-teal-600', isPremium: true, totalQuestions: 436 },
+    { name: 'CRK', icon: '📖', color: 'bg-violet-100 text-violet-600', isPremium: true, totalQuestions: 0 },
+    { name: 'IRK', icon: '🕌', color: 'bg-lime-100 text-lime-600', isPremium: true, totalQuestions: 0 },
+    { name: 'Civic', icon: '🤝', color: 'bg-blue-100 text-blue-600', isPremium: true, totalQuestions: 0 },
+    { name: 'History', icon: '📜', color: 'bg-stone-100 text-stone-600', isPremium: true, totalQuestions: 0 },
+    { name: 'Current Affairs', icon: '📰', color: 'bg-red-100 text-red-600', isPremium: true, totalQuestions: 0 },
 ]
 
 export default function PracticePage() {
     const [isPremium, setIsPremium] = React.useState(false)
     const [isLoading, setIsLoading] = React.useState(true)
     const [selectedSubject, setSelectedSubject] = React.useState<typeof subjects[number] | null>(null)
+    const [showUpgradeModal, setShowUpgradeModal] = React.useState(false)
 
     React.useEffect(() => {
         const supabase = createClient()
@@ -49,11 +59,19 @@ export default function PracticePage() {
     }, [])
 
     const handleSubjectClick = (subject: typeof subjects[number]) => {
-        // Premium users get the year selection modal for ALL subjects
+        const locked = subject.isPremium && !isPremium
+        if (locked) {
+            setShowUpgradeModal(true)
+            return
+        }
+
+        // Only premium users access the year selection modal
         if (isPremium) {
             setSelectedSubject(subject)
+        } else {
+            // Free users on free subjects go directly (already handled by Link in the UI below)
+            // But this function might be called by other interactions, so we keep it consistent.
         }
-        // Non-premium users clicking free subjects navigate directly (handled by Link below)
     }
 
     if (isLoading) {
@@ -100,18 +118,25 @@ export default function PracticePage() {
                                             {locked && <Lock className="w-4 h-4 text-slate-400" />}
                                             {!locked && subject.isPremium && <CheckCircle className="w-4 h-4 text-green-500" />}
                                         </div>
-                                        <p className="text-sm text-slate-500 mb-6">
+                                        <p className="text-sm text-slate-500 mb-4">
                                             Practice past JAMB questions for {subject.name}.
+                                            {subject.totalQuestions > 0 && (
+                                                <span className="ml-1 font-semibold text-slate-700">{subject.totalQuestions.toLocaleString()} Qs</span>
+                                            )}
                                         </p>
 
                                         {locked ? (
-                                            <Link href="/dashboard?upgrade=true">
-                                                <Button variant="outline" className="w-full group/btn">
-                                                    Unlock Subject
-                                                    <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                                                </Button>
-                                            </Link>
+                                            // Premium subject, non-premium user → open upgrade modal
+                                            <Button
+                                                variant="outline"
+                                                className="w-full group/btn"
+                                                onClick={() => setShowUpgradeModal(true)}
+                                            >
+                                                Unlock Subject
+                                                <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                                            </Button>
                                         ) : isPremium ? (
+                                            // Premium user → year selection modal
                                             <Button
                                                 className="w-full bg-primary hover:bg-primary/90"
                                                 onClick={() => handleSubjectClick(subject)}
@@ -119,7 +144,8 @@ export default function PracticePage() {
                                                 Select Year
                                             </Button>
                                         ) : (
-                                            <Link href={`/practice/${subject.name.toLowerCase()}`}>
+                                            // Free subject, non-premium user → direct access (no year filter)
+                                            <Link href={`/practice/${subject.name.toLowerCase()}`} className="w-full block">
                                                 <Button className="w-full bg-primary hover:bg-primary/90">
                                                     Start Practice
                                                 </Button>
@@ -133,14 +159,22 @@ export default function PracticePage() {
                 </div>
             </div>
 
-            {/* Exam Year Selection Modal — Premium users only */}
-            {selectedSubject && (
+            {/* Exam Year Selection Modal — premium users only */}
+            {isPremium && selectedSubject && (
                 <ExamYearModal
                     open={!!selectedSubject}
                     onOpenChange={(open) => {
                         if (!open) setSelectedSubject(null)
                     }}
                     subject={selectedSubject}
+                />
+            )}
+
+            {/* Premium Upgrade Modal — non-premium users only */}
+            {!isPremium && (
+                <UpgradeModal
+                    open={showUpgradeModal}
+                    onOpenChange={setShowUpgradeModal}
                 />
             )}
 

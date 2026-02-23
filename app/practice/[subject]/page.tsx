@@ -20,12 +20,8 @@ export default function SubjectPracticePage() {
     const selectedYear = searchParams.get('year')
     const [isAuthorized, setIsAuthorized] = React.useState<boolean | null>(null)
 
-    // Filter questions for this subject, and optionally by year
-    const subjectQuestions = mockQuestions.filter(q => {
-        const matchesSubject = q.subject.toLowerCase() === subjectName.toLowerCase()
-        const matchesYear = selectedYear ? q.year === parseInt(selectedYear) : true
-        return matchesSubject && matchesYear
-    })
+    const [questions, setQuestions] = React.useState<any[]>([])
+    const [isLoadingQuestions, setIsLoadingQuestions] = React.useState(true)
 
     React.useEffect(() => {
         const supabase = createClient()
@@ -45,27 +41,98 @@ export default function SubjectPracticePage() {
 
             const isPremium = profile?.is_premium || user.user_metadata?.is_premium || false
             const freeSubjects = ['english', 'mathematics']
+            const isFreeSubject = freeSubjects.includes(subjectName.toLowerCase())
 
-            if (!isPremium && !freeSubjects.includes(subjectName.toLowerCase())) {
+            if (!isPremium && !isFreeSubject) {
                 toast.error('This subject is for Premium members only.')
                 router.push('/practice')
                 setIsAuthorized(false)
-            } else {
-                setIsAuthorized(true)
-                // Increment total_started
-                await supabase
-                    .from('profiles')
-                    .update({
-                        total_started: (profile?.total_started || 0) + 1,
-                        updated_at: new Date().toISOString()
-                    })
-                    .eq('id', user.id)
+                return
             }
+
+            setIsAuthorized(true)
+
+            // IF NON-PREMIUM: Use only mocked questions (limited to 20)
+            if (!isPremium && isFreeSubject) {
+                setIsLoadingQuestions(true)
+                try {
+                    const fallback = mockQuestions
+                        .filter(q => q.subject.toLowerCase() === subjectName.toLowerCase())
+                        .slice(0, 20)
+
+                    setQuestions(fallback)
+                } catch (err) {
+                    console.error('Error loading mock questions:', err)
+                } finally {
+                    setIsLoadingQuestions(false)
+                }
+            } else {
+                // IF PREMIUM: Fetch questions from ALOC API via our secure proxy
+                try {
+                    setIsLoadingQuestions(true)
+                    const url = new URL('/api/questions', window.location.origin)
+                    url.searchParams.append('subject', subjectName)
+                    url.searchParams.append('count', '40') // max per ALOC call
+                    if (selectedYear) {
+                        url.searchParams.append('year', selectedYear)
+                    }
+
+                    const response = await fetch(url.toString())
+
+                    // Handle auth errors from the server-side guard
+                    if (response.status === 401) {
+                        router.push('/sign-in')
+                        return
+                    }
+                    if (response.status === 403) {
+                        toast.error('Premium subscription required to access these questions.')
+                        router.push('/dashboard?upgrade=true')
+                        return
+                    }
+                    if (!response.ok) {
+                        throw new Error(`API error: ${response.status}`)
+                    }
+
+                    const data = await response.json()
+
+                    if (!data || data.length === 0) {
+                        // No questions returned — fall back to local mock data (no auth issue)
+                        const fallback = mockQuestions.filter(q => {
+                            const matchesSubject = q.subject.toLowerCase() === subjectName.toLowerCase()
+                            const matchesYear = selectedYear ? q.year === parseInt(selectedYear) : true
+                            return matchesSubject && matchesYear
+                        })
+                        setQuestions(fallback)
+                    } else {
+                        setQuestions(data)
+                    }
+                } catch (error) {
+                    console.error('Error fetching questions:', error)
+                    // Network / unknown error — fall back to mock data
+                    const fallback = mockQuestions.filter(q => {
+                        const matchesSubject = q.subject.toLowerCase() === subjectName.toLowerCase()
+                        const matchesYear = selectedYear ? q.year === parseInt(selectedYear) : true
+                        return matchesSubject && matchesYear
+                    })
+                    setQuestions(fallback)
+                } finally {
+                    setIsLoadingQuestions(false)
+                }
+            }
+
+            // Increment total_started
+            await supabase
+                .from('profiles')
+                .update({
+                    total_started: (profile?.total_started || 0) + 1,
+                    updated_at: new Date().toISOString()
+                })
+                .eq('id', user.id)
         }
         checkAccess()
-    }, [subjectName, router])
+    }, [subjectName, router, selectedYear])
 
-    if (isAuthorized === null) {
+    if (isAuthorized === null || isLoadingQuestions) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-white">
                 <LoadingSpinner />
@@ -99,15 +166,15 @@ export default function SubjectPracticePage() {
                                 </span>
                             )}
                             <p className="text-sm text-slate-500 font-medium">
-                                JAMB Past Questions • {subjectQuestions.length} Questions
+                                JAMB Past Questions • <span className="font-bold text-primary">{questions.length}</span> Questions
                             </p>
                         </div>
                     </div>
                 </div>
 
-                {subjectQuestions.length > 0 ? (
+                {questions.length > 0 ? (
                     <QuestionEngine
-                        questions={subjectQuestions}
+                        questions={questions}
                         subject={subjectName}
                         onComplete={async (score) => {
                             const supabase = createClient()
@@ -134,7 +201,7 @@ export default function SubjectPracticePage() {
                                         .from('profiles')
                                         .update({
                                             total_completed: currentTotal + 1,
-                                            total_score: currentScoreSum + (score / (subjectQuestions.length || 1) * 100),
+                                            total_score: currentScoreSum + (score / (questions.length || 1) * 100),
                                             points: currentPoints + earnedPoints,
                                             updated_at: new Date().toISOString()
                                         })

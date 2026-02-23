@@ -15,4 +15,21 @@ export interface Question {
     is_premium: boolean;
 }
 
-export type Subject = 'English' | 'Mathematics' | 'Physics' | 'Chemistry' | 'Biology' | 'Economics' | 'Government' | 'CRK';
+export type Subject =
+    | 'English'
+    | 'Mathematics'
+    | 'Physics'
+    | 'Chemistry'
+    | 'Biology'
+    | 'Economics'
+    | 'Government'
+    | 'CRK'
+    | 'IRK'
+    | 'Commerce'
+    | 'Accounting'
+    | 'Literature'
+    | 'Geography'
+    | 'Civic'
+    | 'Insurance'
+    | 'Current Affairs'
+    | 'History';

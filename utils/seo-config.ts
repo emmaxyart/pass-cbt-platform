@@ -70,6 +70,9 @@ export const getMetadata = (title?: string, description?: string, path: string =
             icon: '/favicon.png',
             apple: '/favicon.png',
         },
+        verification: {
+            google: '3oqAF4YjdOJPrAWAaW4PT7Z1usOJq7Yb5AcuOLcuX8I',
+        },
         robots: {
             index: !noindex,
             follow: !noindex,

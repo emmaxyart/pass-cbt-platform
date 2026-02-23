@@ -6,15 +6,11 @@ import './globals.css'
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: 'SixthSense - Master JAMB & WAEC Exams',
-  description: 'Prepare for JAMB & WAEC exams with real past questions, detailed analytics, and community competitions. Master your exams with confidence.',
-  generator: 'v0.app',
-  icons: {
-    icon: '/favicon.png',
-    apple: '/favicon.png',
-  },
-}
+import { getMetadata } from '@/utils/seo-config'
+
+export const metadata = getMetadata()
+
+import { OrganizationSchema, WebsiteSchema } from '@/components/structured-data'
 
 export default function RootLayout({
   children,
@@ -24,6 +20,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-sans antialiased">
+        <OrganizationSchema />
+        <WebsiteSchema />
         {children}
         <Analytics />
       </body>

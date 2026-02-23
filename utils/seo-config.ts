@@ -67,8 +67,8 @@ export const getMetadata = (title?: string, description?: string, path: string =
             images: [SITE_CONFIG.ogImage],
         },
         icons: {
-            icon: '/favicon.png',
-            apple: '/favicon.png',
+            icon: '/icon.svg',
+            apple: '/apple-icon.png',
         },
         verification: {
             google: '3oqAF4YjdOJPrAWAaW4PT7Z1usOJq7Yb5AcuOLcuX8I',

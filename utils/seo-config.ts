@@ -23,7 +23,7 @@ export const SITE_CONFIG = {
 }
 
 export const getMetadata = (title?: string, description?: string, path: string = '', noindex: boolean = false): Metadata => {
-    const fullTitle = title ? `${title} | ${SITE_CONFIG.name}` : `${SITE_CONFIG.name} - Master JAMB & WAEC Exams`
+    const fullTitle = title ? `${title} | ${SITE_CONFIG.name}` : `${SITE_CONFIG.name} - Practice JAMB & WAEC past questions- jamb and waec past questions 2026`
     const fullDescription = description || SITE_CONFIG.description
     const url = `${SITE_CONFIG.url}${path}`
 

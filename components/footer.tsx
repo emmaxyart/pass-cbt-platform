@@ -27,6 +27,7 @@ export function Footer() {
 
   return (
     <motion.footer
+      id="contact"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
@@ -43,26 +44,31 @@ export function Footer() {
         >
           {/* Brand */}
           <motion.div className="md:col-span-1" variants={itemVariants}>
-            <Link href="/" className="flex items-center gap-2 font-bold text-xl mb-4 hover:opacity-80 transition">
+            <Link href="/" className="flex items-center gap-2 font-black text-2xl mb-4 hover:opacity-80 transition text-primary">
               SixthSense
             </Link>
-            <p className="text-sm opacity-80">
-              Empowering Nigerian students to excel in JAMB and WAEC exams.
+            <p className="text-sm opacity-80 leading-relaxed font-medium">
+              Empowering Nigerian students to achieve 300+ in JAMB and WAEC with smart CBA tools and analytics.
             </p>
           </motion.div>
 
           {/* Product Links */}
           <motion.div className="hidden md:block" variants={itemVariants}>
-            <h3 className="font-semibold text-sm mb-4">Product</h3>
-            <ul className="space-y-2">
+            <h3 className="font-bold text-sm mb-4 uppercase tracking-wider text-slate-300">Product</h3>
+            <ul className="space-y-3 font-medium">
               <li>
-                <Link href="/practice" className="text-sm opacity-80 hover:opacity-100 transition">
-                  Practice Tests
+                <Link href="/practice" className="text-sm opacity-80 hover:opacity-100 hover:text-primary transition">
+                  Free Demo Test
                 </Link>
               </li>
               <li>
-                <Link href="/dashboard" className="text-sm opacity-80 hover:opacity-100 transition">
-                  Dashboard
+                <Link href="/syllabus" className="text-sm opacity-80 hover:opacity-100 hover:text-primary transition">
+                  Exam Syllabus
+                </Link>
+              </li>
+              <li>
+                <Link href="#pricing" className="text-sm opacity-80 hover:opacity-100 hover:text-primary transition">
+                  Pricing Plans
                 </Link>
               </li>
             </ul>
@@ -70,51 +76,49 @@ export function Footer() {
 
           {/* Company */}
           <motion.div className="hidden md:block" variants={itemVariants}>
-            <h3 className="font-semibold text-sm mb-4">Company</h3>
-            <ul className="space-y-2">
+            <h3 className="font-bold text-sm mb-4 uppercase tracking-wider text-slate-300">Company</h3>
+            <ul className="space-y-3 font-medium">
               <li>
-                <Link href="#about" className="text-sm opacity-80 hover:opacity-100 transition">
+                <Link href="#about" className="text-sm opacity-80 hover:opacity-100 hover:text-primary transition">
                   About Us
                 </Link>
               </li>
             </ul>
           </motion.div>
 
-          {/* Support */}
+          {/* Contact */}
           <motion.div className="hidden md:block" variants={itemVariants}>
-            <h3 className="font-semibold text-sm mb-4">Support</h3>
-            <ul className="space-y-2">
+            <h3 className="font-bold text-sm mb-4 uppercase tracking-wider text-slate-300">Contact</h3>
+            <ul className="space-y-3 font-medium">
               <li>
-                <Link href="#" className="text-sm opacity-80 hover:opacity-100 transition">
+                <Link href="mailto:support@sixthsense.com.ng" className="text-sm opacity-80 hover:opacity-100 hover:text-primary transition">
+                  support@sixthsense.com.ng
+                </Link>
+              </li>
+              <li>
+                <Link href="https://wa.me/2349037441641" className="text-sm opacity-80 hover:opacity-100 hover:text-primary transition">
+                  WhatsApp Support
+                </Link>
+              </li>
+              <li>
+                <Link href="#" className="text-sm opacity-80 hover:opacity-100 hover:text-primary transition">
                   Help Center
                 </Link>
-              </li>
-              <li>
-                <Link href="#" className="text-sm opacity-80 hover:opacity-100 transition">
-                  Contact Us
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="text-sm opacity-80 hover:opacity-100 transition">
-                  FAQ
-                </Link>
-              </li>
-              <li>
               </li>
             </ul>
           </motion.div>
 
           {/* Legal */}
           <motion.div className="hidden md:block" variants={itemVariants}>
-            <h3 className="font-semibold text-sm mb-4">Legal</h3>
-            <ul className="space-y-2">
+            <h3 className="font-bold text-sm mb-4 uppercase tracking-wider text-slate-300">Legal</h3>
+            <ul className="space-y-3 font-medium">
               <li>
-                <Link href="#" className="text-sm opacity-80 hover:opacity-100 transition">
+                <Link href="#" className="text-sm opacity-80 hover:opacity-100 hover:text-primary transition">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm opacity-80 hover:opacity-100 transition">
+                <Link href="#" className="text-sm opacity-80 hover:opacity-100 hover:text-primary transition">
                   Terms of Service
                 </Link>
               </li>
@@ -134,8 +138,8 @@ export function Footer() {
           viewport={{ once: true }}
         >
           {/* Copyright */}
-          <p className="text-sm opacity-80">
-            © 2026 SixthSense. All rights reserved.
+          <p className="text-sm opacity-80 font-medium">
+            © 2026 SixthSense Exam Prep. All rights reserved.
           </p>
 
           {/* Social Links */}

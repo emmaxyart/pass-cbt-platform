@@ -8,23 +8,28 @@ const features = [
   {
     icon: BookOpen,
     title: 'Real Past Questions',
-    description: 'Access authentic past exam questions from JAMB and WAEC to practice with actual exam-style content.'
-  },
-  {
-    icon: TrendingUp,
-    title: 'Detailed Analytics',
-    description: 'Track your performance with comprehensive analytics, identify weak areas, and monitor your progress over time.'
+    description: 'Master your exams with 20,000+ authentic JAMB (2026 updated) and WAEC questions with verified answers.'
   },
   {
     icon: Zap,
-    title: 'Smart Suggestions',
-    description: 'Get personalized improvement recommendations based on your performance and learning patterns.'
+    title: 'Timed CBT Environment',
+    description: 'Get used to the pressure. Experience real-life computer-based test simulations that mirror the actual exam portal.'
+  },
+  {
+    icon: TrendingUp,
+    title: 'Performance Analytics',
+    description: 'See exactly where you stand. Detailed topic-by-topic breakdown and weak area detection to guide your study.'
+  },
+  {
+    icon: Trophy,
+    title: 'Smart Recommendations',
+    description: 'Stop guessing what to read. Get AI-powered study suggestions tailored to boost your scores in weak subjects.'
   }
 ]
 
 export function Features() {
   return (
-    <section id="practice" className="w-full pt-4 md:pt-8 lg:pt-12 pb-8 md:pb-12 lg:pb-16 bg-background/0">
+    <section id="features" className="w-full pt-4 md:pt-8 lg:pt-12 pb-8 md:pb-12 lg:pb-16 bg-background/0">
       <div className="px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
@@ -44,7 +49,7 @@ export function Features() {
 
         {/* Features Grid */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}

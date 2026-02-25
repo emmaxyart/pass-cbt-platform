@@ -3,17 +3,21 @@ import { Metadata } from 'next'
 export const SITE_CONFIG = {
     name: 'SixthSense',
     author: 'SixthSense Team',
-    description: 'pass jamb and waec easily with sixthsense- surest waec and jamb questions plug',
+    description: 'Prepare for JAMB 2026 and WAEC with real past questions, timed CBT tests, performance tracking, and personalized study recommendations.',
     url: 'https://pass-cbt-platform.vercel.app', // Replace with actual domain
     keywords: [
-        'JAMB',
-        'WAEC',
+        'JAMB 2026',
+        'WAEC 2026',
         'CBT Practice',
-        'Exam Prep',
-        'Past Questions',
+        'Exam Prep Nigeria',
+        'JAMB Past Questions',
+        'WAEC Past Questions',
+        'Post-UTME Practice',
         'Syllabus',
         'Nigeria Education',
         'Study Materials',
+        'Free JAMB Past Questions',
+        'WAEC CBT practice online',
     ],
     links: {
         twitter: 'https://pass-cbt-platform.vercel.app'
@@ -23,7 +27,7 @@ export const SITE_CONFIG = {
 }
 
 export const getMetadata = (title?: string, description?: string, path: string = '', noindex: boolean = false): Metadata => {
-    const fullTitle = title ? `${title} | ${SITE_CONFIG.name}` : `${SITE_CONFIG.name} - Practice JAMB & WAEC past questions- jamb and waec past questions 2026`
+    const fullTitle = title ? `${title} | ${SITE_CONFIG.name}` : `SixthSense – Best JAMB & WAEC CBT Practice Platform 2026 | Past Questions + Analytics`
     const fullDescription = description || SITE_CONFIG.description
     const url = `${SITE_CONFIG.url}${path}`
 

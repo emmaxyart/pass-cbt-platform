@@ -34,11 +34,13 @@ export function Header() {
 
   const navLinks = [
     { href: '/', label: 'Home' },
-    { href: '/practice', label: 'Practice' },
+    ...(!user ? [
+      { href: '#features', label: 'Features' },
+      { href: '#pricing', label: 'Pricing' },
+    ] : []),
+    { href: '/syllabus', label: 'Subjects' },
     { href: '/dashboard', label: 'Dashboard' },
-    { href: '/profile', label: 'Profile' },
-    { href: '/syllabus', label: 'Syllabus' },
-    { href: '/about', label: 'About Us' },
+    { href: '#contact', label: 'Contact' },
   ]
 
   const filteredLinks = navLinks.filter(link => pathname !== link.href)

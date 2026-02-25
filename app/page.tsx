@@ -4,6 +4,7 @@ import { Features } from '@/components/features'
 import { CtaSection } from '@/components/cta-section'
 import { Community } from '@/components/community'
 import { Footer } from '@/components/footer'
+import { WhatsAppButton } from '@/components/whatsapp-button'
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
         <CtaSection />
         <Community />
         <Footer />
+        <WhatsAppButton />
       </div>
     </main>
   )

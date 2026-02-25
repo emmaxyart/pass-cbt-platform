@@ -12,6 +12,8 @@ export const metadata = getMetadata()
 
 import { OrganizationSchema, WebsiteSchema } from '@/components/structured-data'
 
+import { Toaster } from 'sonner'
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -24,6 +26,7 @@ export default function RootLayout({
         <WebsiteSchema />
         {children}
         <Analytics />
+        <Toaster position="top-right" richColors />
       </body>
     </html>
   )

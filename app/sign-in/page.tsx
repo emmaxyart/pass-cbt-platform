@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Header } from '@/components/header'
@@ -11,6 +12,7 @@ import { createClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
 
 export default function SignIn() {
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -35,7 +37,7 @@ export default function SignIn() {
       }
 
       toast.success('Signed in successfully!')
-      window.location.href = '/dashboard'
+      router.push('/dashboard')
     } catch (err) {
       console.error('Sign in unexpected error:', err)
       toast.error('An unexpected error occurred. Please try again.')

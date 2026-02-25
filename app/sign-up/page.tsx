@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Header } from '@/components/header'
@@ -19,6 +20,7 @@ const NIGERIAN_STATES = [
 ]
 
 export default function SignUp() {
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
     firstName: '',
@@ -73,7 +75,7 @@ export default function SignUp() {
       toast.success('Registration successful! Please check your email to confirm.')
       // Optional: Redirect to a success page or sign-in
       setTimeout(() => {
-        window.location.href = '/sign-in'
+        router.push('/sign-in')
       }, 2000)
     } catch (err) {
       toast.error('An unexpected error occurred. Please try again.')
